@@ -3,6 +3,8 @@ import { GameObjects, Scene } from "phaser";
 export class MainMenu extends Scene {
     background: GameObjects.Image;
     title: GameObjects.Text;
+    description: GameObjects.Text;
+    instruction: GameObjects.Text;
     startButton: GameObjects.Text;
 
     constructor() {
@@ -24,6 +26,18 @@ export class MainMenu extends Scene {
             .setOrigin(0.5)
             .setDepth(100);
 
+        this.description = this.add
+            .text(512, 250, "Get score 40 score \ncatching stars", {
+                fontFamily: "Arial Black",
+                fontSize: 36,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
+
         this.startButton = this.add
             .text(512, 400, "Start Game", {
                 fontFamily: "Arial Black",
@@ -34,6 +48,18 @@ export class MainMenu extends Scene {
             })
             .setPadding(24)
             .setOrigin(0.5);
+
+        this.description = this.add
+            .text(512, 600, "Use arrows (left, right and up)", {
+                fontFamily: "Arial",
+                fontSize: 18,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
 
         this.startButton.setInteractive({ useHandCursor: true });
 

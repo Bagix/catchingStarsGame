@@ -13,6 +13,7 @@ export class Game extends Scene {
     stars: Phaser.Physics.Arcade.Group;
     score: number = 0;
     scoreText: Phaser.GameObjects.Text;
+    treshold: number = 0.008;
 
     constructor() {
         super("Game");
@@ -82,7 +83,7 @@ export class Game extends Scene {
         });
 
         // Randomly spawn new stars
-        if (Math.random() < 0.008) {
+        if (Math.random() < this.treshold) {
             this.spawnStar();
         }
     }
@@ -99,6 +100,14 @@ export class Game extends Scene {
         s.destroy();
         this.score += 1;
         this.scoreText.setText("Score: " + this.score);
-        // this.spawnStar();
+
+        if (this.score === 40) {
+            this.bgMusic.stop();
+            this.scene.start("GameOver");
+        }
+
+        if (this.treshold < 0.02 && this.score % 2 === 0) {
+            this.treshold *= 1.05;
+        }
     }
 }
