@@ -11,13 +11,29 @@ export class MainMenu extends Scene {
         super("MainMenu");
     }
 
+    private calculateFontSize(baseSize: number): number {
+        const { height } = this.scale;
+        console.log(
+            "Calculating font size based on height:",
+            baseSize * (height / 500),
+        );
+        return baseSize * (height / 500);
+    }
+
     create() {
-        this.background = this.add.image(512, 384, "background");
+        const { width, height } = this.scale;
+        const horizontalCenter = width / 2;
+        const verticalCenter = height / 2;
+
+        const titleSize = this.calculateFontSize(48);
+        const descSize = this.calculateFontSize(20);
+        const buttonSize = this.calculateFontSize(24);
+        const instructSize = this.calculateFontSize(16);
 
         this.title = this.add
-            .text(512, 50, "Main Menu", {
+            .text(horizontalCenter, height * 0.1, "Main Menu", {
                 fontFamily: "Arial Black",
-                fontSize: 52,
+                fontSize: titleSize,
                 color: "#ffffff",
                 stroke: "#000000",
                 strokeThickness: 8,
@@ -27,21 +43,26 @@ export class MainMenu extends Scene {
             .setDepth(100);
 
         this.description = this.add
-            .text(512, 250, "Get score 40 score \ncatching stars", {
-                fontFamily: "Arial Black",
-                fontSize: 36,
-                color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
-            })
+            .text(
+                horizontalCenter,
+                height * 0.3,
+                "Get score 40 score \ncatching stars",
+                {
+                    fontFamily: "Arial Black",
+                    fontSize: descSize,
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 8,
+                    align: "center",
+                },
+            )
             .setOrigin(0.5)
             .setDepth(100);
 
         this.startButton = this.add
-            .text(512, 400, "Start Game", {
+            .text(horizontalCenter, height * 0.5, "Start Game", {
                 fontFamily: "Arial Black",
-                fontSize: 26,
+                fontSize: buttonSize,
                 color: "#2acf5b",
                 align: "center",
                 backgroundColor: "#2d2d2d",
@@ -49,15 +70,20 @@ export class MainMenu extends Scene {
             .setPadding(24)
             .setOrigin(0.5);
 
-        this.description = this.add
-            .text(512, 600, "Use arrows (left, right and up)", {
-                fontFamily: "Arial",
-                fontSize: 18,
-                color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
-            })
+        this.instruction = this.add
+            .text(
+                horizontalCenter,
+                height * 0.8,
+                "Use arrows (left, right and up)",
+                {
+                    fontFamily: "Arial",
+                    fontSize: instructSize,
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 8,
+                    align: "center",
+                },
+            )
             .setOrigin(0.5)
             .setDepth(100);
 
