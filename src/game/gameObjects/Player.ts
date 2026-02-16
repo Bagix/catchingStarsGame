@@ -8,7 +8,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.setBounce(0.2);
         this.setCollideWorldBounds(true);
         this.initAnimations();
-        this.setGravityY(200);
+        const gravityY = Math.max(scene.cameras.main.height / 10, 200);
+        this.setGravityY(gravityY);
         scene.sound.add("jump");
     }
 
@@ -40,13 +41,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
-    moveLeft() {
-        this.setVelocityX(-200);
+    moveLeft(cameraWidth: number) {
+        this.setVelocityX(-cameraWidth / 5);
         this.anims.play("left", true);
     }
 
-    moveRight() {
-        this.setVelocityX(200);
+    moveRight(cameraWidth: number) {
+        this.setVelocityX(cameraWidth / 5);
         this.anims.play("right", true);
     }
 
@@ -55,9 +56,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.anims.play("turn");
     }
 
-    jump() {
+    jump(cameraHeight: number) {
         if (this.body?.blocked.down) {
-            this.setVelocityY(-300);
+            const jumpVelocity = Math.max(cameraHeight / 3, 250);
+            this.setVelocityY(-jumpVelocity);
             this.scene.sound.play("jump", { volume: 0.25 });
         }
     }

@@ -22,7 +22,9 @@ export class Game extends Scene {
     create() {
         this.camera = this.cameras.main;
 
-        this.background = this.add.image(512, 384, "background");
+        this.background = this.add.image(this.camera.centerX, this.camera.centerY, "background");
+        this.background.setDisplaySize(this.camera.width, this.camera.height);
+        this.background.setScrollFactor(0);
         this.background.setAlpha(0.5);
 
         this.bgMusic = this.sound.add("bg-music", { loop: true, volume: 0.25 });
@@ -35,7 +37,14 @@ export class Game extends Scene {
 
         this.platform = this.physics.add.staticGroup();
 
-        this.player = new Player(this, 100, 600);
+        this.player = new Player(this, this.camera.centerX, this.camera.height - 132);
+
+        if (this.camera.width > 1600 && this.camera.width < 2140) {
+            this.player.setScale(1.5).refreshBody();
+        } else if (this.camera.width >= 2140) {
+            console.log("Setting scale to 2");
+            this.player.setScale(2).refreshBody();
+        }
 
         this.physics.add.collider(this.player, this.platform);
 
@@ -58,26 +67,29 @@ export class Game extends Scene {
 
         // Spawn first star
         this.spawnStar();
-        this.platform.create(512, 750, "platform").setScale(2.5).refreshBody();
+        const platform = this.platform.create(this.camera.centerX, this.camera.height - 32, "platform");
+
+        platform.setScale(Math.ceil(this.camera.width / platform.width), 2).refreshBody();
+        platform.setDepth(50);
         this.cursor = this.input.keyboard!.createCursorKeys();
     }
 
     update() {
         if (this.cursor.left.isDown) {
-            this.player.moveLeft();
+            this.player.moveLeft(this.camera.width);
         } else if (this.cursor.right.isDown) {
-            this.player.moveRight();
+            this.player.moveRight(this.camera.width);
         } else {
             this.player.idle();
         }
 
         if (this.cursor.up.isDown) {
-            this.player.jump();
+            this.player.jump(this.camera.height);
         }
 
         // Remove stars that fell off screen
         this.stars.children.entries.forEach((star: any) => {
-            if (star.y > 800) {
+            if (star.y > this.camera.height) {
                 star.destroy();
             }
         });
@@ -89,8 +101,9 @@ export class Game extends Scene {
     }
 
     spawnStar() {
-        const x = Phaser.Math.Between(50, 974);
+        const x = Phaser.Math.Between(50, this.camera.width - 50);
         const star = new Star(this, x, -10);
+        star.setDepth(1);
         this.stars.add(star);
     }
 
